@@ -61,9 +61,9 @@ def main():
                     opRes = int(input('=> '))
                     vResNvideos[vRes_list[opRes-1]].download(save_path)
                     print('\nFile saved at', save_path)
-                except ValueError as errorCode:
+                except (ValueError, IndexError) as errorCode:
                     print('\nInvalid input!\nReturned to main menu.')
-            except Exception:
+            except Exception as e:
                 print('\nInvalid URL!')
         elif(url_.lower() == 'exit'):
             print('\nExit successfully!')
