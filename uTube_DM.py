@@ -6,6 +6,10 @@ import platform
 from pytube import YouTube
 
 
+# Global variables
+fileSize = 0
+
+
 def checkWindowsDrive(DriveLetter: str) -> bool:
     '''
     Check if windows drive letter is correct or not.
@@ -14,7 +18,18 @@ def checkWindowsDrive(DriveLetter: str) -> bool:
     return os.path.isdir(DriveLetter)
 
 
+def progress(chunk: bytes, file_handler, bytes_remaining: int):
+    '''
+        It will show how much completed downloading.
+    '''
+    global fileSize
+    remaining = (100 * bytes_remaining) / fileSize
+    step = 100 - int(remaining)
+    print(f'Completed {step}%', end='\r')
+
+
 def main():
+    global fileSize
     vRes_pat = r'res=\"([\d\w]+)\"'
     while(True):
         if platform.system() == 'Windows':
@@ -43,7 +58,8 @@ def main():
         url_ = str(input('=> '))
         if(url_.lower() != 'exit'):
             try:
-                videos_ = YouTube(url=url_).streams.filter(progressive=True)
+                videos_ = YouTube(url=url_, on_progress_callback=progress).streams.filter(
+                    progressive=True)
                 print('\n---------------------------------------------------')
                 print('Available video resolutions')
                 print('---------------------------------------------------\n')
@@ -62,12 +78,15 @@ def main():
                 print('---------------------------------------------------\n')
                 try:
                     opRes = int(input('=> '))
+                    print()
+                    # FileSize variable for Progress status
+                    fileSize = vResNvideos[vRes_list[opRes-1]].filesize
                     vResNvideos[vRes_list[opRes-1]].download(save_path)
                     print('\nFile saved at', save_path)
                 except (ValueError, IndexError) as errorCode:
                     print('\nInvalid input!\nReturned to main menu.')
             except Exception as e:
-                print('\nInvalid URL!')
+                print('\nInvalid URL!', e)
         elif(url_.lower() == 'exit'):
             print('\nExit successfully!')
             break
