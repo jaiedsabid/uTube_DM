@@ -86,7 +86,7 @@ def main():
                 except (ValueError, IndexError) as errorCode:
                     print('\nInvalid input!\nReturned to main menu.')
             except Exception as e:
-                print('\nInvalid URL!', e)
+                print('\nInvalid command or URL!')
         elif(url_.lower() == 'exit'):
             print('\nExit successfully!')
             break
