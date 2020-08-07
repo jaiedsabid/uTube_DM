@@ -52,7 +52,9 @@ def main():
                     vRes = re.findall(vRes_pat, str(video_))
                     vResNvideos[str(vRes[0])] = video_
                     vRes_list.append(str(vRes[0]))
-                    print('{0}) {1}'.format(opRes, vRes[0]))
+                    # Print available resulation and file size
+                    print('{0}) {1} - {2:.1f} MB'.format(opRes,
+                                                         vRes[0], vResNvideos[vRes[0]].filesize/2**20))
                     opRes += 1
                 print('\n---------------------------------------------------')
                 print(
